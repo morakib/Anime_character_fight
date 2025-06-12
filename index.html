@@ -64,31 +64,267 @@
       text-align: center;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
+    .options-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    }
+
   </style>
 </head>
 <body>
-  <h1>ANIME FIGHT WORLD</h1>
+  <h1>ANIME characters</h1>
   <div id="game">
+  <div class="options-container">
     <button id="option1" class="option-btn"></button>
     <div class="vs">VS</div>
     <button id="option2" class="option-btn"></button>
+  </div>
+  <div class="options-container"></div>
     <div class="info" id="roundInfo"></div>
     <div class="info" id="lastWinner"></div>
-    <div class="controls">
-      <button id="passBtn" class="option-btn">Pass This Round</button>
-      <button id="restartBtn" class="option-btn">Restart Game</button>
-    </div>
   </div>
-  <div id="result" class="hidden">
-    <div class="result-box">
-      <h2>Game Over!</h2>
-      <p id="winnerText"></p>
-      <button id="playAgainBtn" class="option-btn">Play Again</button>
-    </div>
+  <div class="controls">
+    <button id="passBtn" class="option-btn">SWAP</button>
+    <button id="restartBtn" class="option-btn">Restart </button>
   </div>
+</div>
+
+<div id="result" class="hidden">
+  <div class="result-box">
+    <h2>Game Over!</h2>
+    <p id="winnerText"></p>
+    <button id="playAgainBtn" class="option-btn">Play Again</button>
+  </div>
+</div>
+
 
   <script>
-    const ANIME_LIST = ["Goku (Dragon Ball)", "Luffy (One Piece)", "Naruto (Naruto)", "Deku (My Hero Academia)", "Eren (Attack on Titan)", "Saitama (One Punch Man)", "Levi (Attack on Titan)", "Light Yagami (Death Note)", "Edward Elric (Fullmetal Alchemist)", "Ichigo (Bleach)"];
+    const ANIME_LIST = [
+  "Goku (Dragon Ball)",
+  "Vegeta (Dragon Ball)",
+  "Frieza (Dragon Ball)",
+  "Luffy (One Piece)",
+  "Zoro (One Piece)",
+  "Blackbeard (One Piece)",
+  "Naruto (Naruto)",
+  "Sasuke (Naruto)",
+  "Madara Uchiha (Naruto)",
+  "Kakashi (Naruto)",
+  "Deku (My Hero Academia)",
+  "Bakugo (My Hero Academia)",
+  "All Might (My Hero Academia)",
+  "Shigaraki (My Hero Academia)",
+  "Eren Yeager (Attack on Titan)",
+  "Levi Ackerman (Attack on Titan)",
+  "Zeke Yeager (Attack on Titan)",
+  "Saitama (One Punch Man)",
+  "Genos (One Punch Man)",
+  "Garou (One Punch Man)",
+  "Light Yagami (Death Note)",
+  "L (Death Note)",
+  "Ryuk (Death Note)",
+  "Edward Elric (Fullmetal Alchemist)",
+  "Roy Mustang (Fullmetal Alchemist)",
+  "Father (Fullmetal Alchemist)",
+  "Ichigo Kurosaki (Bleach)",
+  "Rukia Kuchiki (Bleach)",
+  "Aizen (Bleach)",
+  "Gojo Satoru (Jujutsu Kaisen)",
+  "Yuji Itadori (Jujutsu Kaisen)",
+  "Sukuna (Jujutsu Kaisen)",
+  "Tanjiro Kamado (Demon Slayer)",
+  "Nezuko Kamado (Demon Slayer)",
+  "Muzan Kibutsuji (Demon Slayer)",
+  "Gon Freecss (Hunter x Hunter)",
+  "Killua Zoldyck (Hunter x Hunter)",
+  "Hisoka (Hunter x Hunter)",
+  "Meruem (Hunter x Hunter)",
+  "Kurapika (Hunter x Hunter)",
+  "Leorio (Hunter x Hunter)",
+  "Netero (Hunter x Hunter)",
+  "Spike Spiegel (Cowboy Bebop)",
+  "Jet Black (Cowboy Bebop)",
+  "Faye Valentine (Cowboy Bebop)",
+  "Vicious (Cowboy Bebop)",
+  "Edward Wong Hau (Cowboy Bebop)",
+  "Guts (Berserk)",
+  "Griffith (Berserk)",
+  "Casca (Berserk)",
+  "Alucard (Hellsing)",
+  "Integra Hellsing (Hellsing)",
+  "Seras Victoria (Hellsing)",
+  "Anderson (Hellsing)",
+  "Lelouch Lamperouge (Code Geass)",
+  "Suzaku Kururugi (Code Geass)",
+  "C.C. (Code Geass)",
+  "Kallen Stadtfeld (Code Geass)",
+  "Kirito (Sword Art Online)",
+  "Asuna (Sword Art Online)",
+  "Leafa (Sword Art Online)",
+  "Sinon (Sword Art Online)",
+  "Kuroko (A Certain Scientific Railgun)",
+  "Misaka Mikoto (A Certain Scientific Railgun)",
+  "Accelerator (A Certain Magical Index)",
+  "Touma Kamijou (A Certain Magical Index)",
+  "Kaneki Ken (Tokyo Ghoul)",
+  "Touka Kirishima (Tokyo Ghoul)",
+  "Rize Kamishiro (Tokyo Ghoul)",
+  "Arima Kishou (Tokyo Ghoul)",
+  "Meliodas (Seven Deadly Sins)",
+  "Ban (Seven Deadly Sins)",
+  "Escanor (Seven Deadly Sins)",
+  "Diane (Seven Deadly Sins)",
+  "King (Seven Deadly Sins)",
+  "Inuyasha (Inuyasha)",
+  "Kagome Higurashi (Inuyasha)",
+  "Sesshomaru (Inuyasha)",
+  "Kikyo (Inuyasha)",
+  "Jotaro Kujo (JoJo's Bizarre Adventure)",
+  "Dio Brando (JoJo's Bizarre Adventure)",
+  "Joseph Joestar (JoJo's Bizarre Adventure)",
+  "Giorno Giovanna (JoJo's Bizarre Adventure)",
+  "Bruno Bucciarati (JoJo's Bizarre Adventure)",
+  "Yusuke Urameshi (Yu Yu Hakusho)",
+  "Hiei (Yu Yu Hakusho)",
+  "Kurama (Yu Yu Hakusho)",
+  "Kuwabara (Yu Yu Hakusho)",
+  "Toguro (Yu Yu Hakusho)",
+  "Revy (Black Lagoon)",
+  "Rock (Black Lagoon)",
+  "Balalaika (Black Lagoon)",
+  "Dutch (Black Lagoon)",
+  "Vash the Stampede (Trigun)",
+  "Wolfwood (Trigun)",
+  "Knives Millions (Trigun)",
+  "Meryl Stryfe (Trigun)",
+  "Shinichi Izumi (Parasyte)",
+  "Migi (Parasyte)",
+  "Gotou (Parasyte)",
+  "Reiko Tamura (Parasyte)",
+  "Senku (Dr. Stone)",
+  "Tsukasa Shishio (Dr. Stone)",
+  "Kohaku (Dr. Stone)",
+  "Gen Asagiri (Dr. Stone)",
+  "Rimuru Tempest (That Time I Got Reincarnated as a Slime)",
+  "Milim Nava (That Time I Got Reincarnated as a Slime)",
+  "Benimaru (That Time I Got Reincarnated as a Slime)",
+  "Hinata Sakaguchi (That Time I Got Reincarnated as a Slime)",
+  "Naofumi Iwatani (The Rising of the Shield Hero)",
+  "Raphtalia (The Rising of the Shield Hero)",
+  "Filo (The Rising of the Shield Hero)",
+  "Motoyasu (The Rising of the Shield Hero)",
+  "Thorfinn (Vinland Saga)",
+  "Askeladd (Vinland Saga)",
+  "Canute (Vinland Saga)",
+  "Thorkell (Vinland Saga)",
+  "Anya Forger (Spy x Family)",
+  "Loid Forger (Spy x Family)",
+  "Yor Forger (Spy x Family)",
+  "Damian Desmond (Spy x Family)",
+  "Denji (Chainsaw Man)",
+  "Power (Chainsaw Man)",
+  "Makima (Chainsaw Man)",
+  "Aki Hayakawa (Chainsaw Man)",
+  "Hinata Shoyo (Haikyuu!!)",
+  "Kageyama Tobio (Haikyuu!!)",
+  "Nishinoya Yuu (Haikyuu!!)",
+  "Oikawa Tooru (Haikyuu!!)",
+  "Rimuru Tempest (That Time I Got Reincarnated as a Slime)",
+  "Milim Nava (That Time I Got Reincarnated as a Slime)",
+  "Benimaru (That Time I Got Reincarnated as a Slime)",
+  "Hinata Sakaguchi (That Time I Got Reincarnated as a Slime)",
+  "Naofumi Iwatani (The Rising of the Shield Hero)",
+  "Raphtalia (The Rising of the Shield Hero)",
+  "Filo (The Rising of the Shield Hero)",
+  "Motoyasu (The Rising of the Shield Hero)",
+  "Subaru Natsuki (Re:Zero)",
+  "Emilia (Re:Zero)",
+  "Rem (Re:Zero)",
+  "Ram (Re:Zero)",
+  "Kazuma Satou (Konosuba)",
+  "Aqua (Konosuba)",
+  "Megumin (Konosuba)",
+  "Darkness (Konosuba)",
+  "Rudeus Greyrat (Mushoku Tensei)",
+  "Eris Boreas (Mushoku Tensei)",
+  "Roxy Migurdia (Mushoku Tensei)",
+  "Sylphiette (Mushoku Tensei)",
+  "Cid Kagenou (The Eminence in Shadow)",
+  "Alpha (The Eminence in Shadow)",
+  "Beta (The Eminence in Shadow)",
+  "Gamma (The Eminence in Shadow)",
+  "Ainz Ooal Gown (Overlord)",
+  "Albedo (Overlord)",
+  "Shalltear (Overlord)",
+  "Demiurge (Overlord)",
+  "Tanya Degurechaff (The Saga of Tanya the Evil)",
+  "Viktoriya (The Saga of Tanya the Evil)",
+  "Mary Sioux (The Saga of Tanya the Evil)",
+  "Rerugen (The Saga of Tanya the Evil)",
+  "Shiro (No Game No Life)",
+  "Sora (No Game No Life)",
+  "Stephanie Dola (No Game No Life)",
+  "Jibril (No Game No Life)",
+  "Kiyotaka Ayanokoji (Classroom of the Elite)",
+  "Suzune Horikita (Classroom of the Elite)",
+  "Kikyo Kushida (Classroom of the Elite)",
+  "Manabu Horikita (Classroom of the Elite)",
+  "Hachiman Hikigaya (Oregairu)",
+  "Yukino Yukinoshita (Oregairu)",
+  "Yui Yuigahama (Oregairu)",
+  "Shizuka Hiratsuka (Oregairu)",
+  "Tomoya Okazaki (Clannad)",
+  "Nagisa Furukawa (Clannad)",
+  "Tomoyo Sakagami (Clannad)",
+  "Kyou Fujibayashi (Clannad)",
+  "Okabe Rintarou (Steins;Gate)",
+  "Kurisu Makise (Steins;Gate)",
+  "Mayuri Shiina (Steins;Gate)",
+  "Itaru Hashida (Steins;Gate)",
+  "Lelouch Lamperouge (Code Geass)",
+  "Suzaku Kururugi (Code Geass)",
+  "C.C. (Code Geass)",
+  "Kallen Stadtfeld (Code Geass)",
+  "Shinji Ikari (Neon Genesis Evangelion)",
+  "Rei Ayanami (Neon Genesis Evangelion)",
+  "Asuka Langley (Neon Genesis Evangelion)",
+  "Gendo Ikari (Neon Genesis Evangelion)",
+  "Guts (Berserk)",
+  "Griffith (Berserk)",
+  "Casca (Berserk)",
+  "Puck (Berserk)",
+  "Spike Spiegel (Cowboy Bebop)",
+  "Jet Black (Cowboy Bebop)",
+  "Faye Valentine (Cowboy Bebop)",
+  "Vicious (Cowboy Bebop)",
+  "Edward Elric (Fullmetal Alchemist)",
+  "Alphonse Elric (Fullmetal Alchemist)",
+  "Roy Mustang (Fullmetal Alchemist)",
+  "Winry Rockbell (Fullmetal Alchemist)",
+  "Gon Freecss (Hunter x Hunter)",
+  "Killua Zoldyck (Hunter x Hunter)",
+  "Hisoka (Hunter x Hunter)",
+  "Kurapika (Hunter x Hunter)",
+  "Jotaro Kujo (JoJo's Bizarre Adventure)",
+  "Dio Brando (JoJo's Bizarre Adventure)",
+  "Joseph Joestar (JoJo's Bizarre Adventure)",
+  "Giorno Giovanna (JoJo's Bizarre Adventure)",
+  "Yusuke Urameshi (Yu Yu Hakusho)",
+  "Hiei (Yu Yu Hakusho)",
+  "Kurama (Yu Yu Hakusho)",
+  "Kuwabara (Yu Yu Hakusho)",
+  "Vash the Stampede (Trigun)",
+  "Wolfwood (Trigun)",
+  "Meryl Stryfe (Trigun)",
+  "Knives Millions (Trigun)",
+  "Alucard (Hellsing)",
+  "Integra Hellsing (Hellsing)",
+  "Seras Victoria (Hellsing)",
+  "Alexander Anderson (Hellsing)"
+];
     const MAX_ROUNDS = 25;
 
     let remainingCharacters = [];
