@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Fight World</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #6b21a8, #3730a3);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #facc15;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .option-btn {
+      background-color: #7e22ce;
+      border: none;
+      color: white;
+      padding: 20px;
+      margin: 10px;
+      font-size: 1.25rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      min-width: 200px;
+    }
+    .option-btn:hover {
+      background-color: #6b21a8;
+      transform: scale(1.05);
+    }
+    .vs {
+      font-size: 3rem;
+      color: #facc15;
+      margin: 20px;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .controls {
+      margin-top: 40px;
+    }
+    .info {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+    .hidden { display: none; }
+    .result-box {
+      background: #6b21a8;
+      padding: 30px;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+  <h1>ANIME FIGHT WORLD</h1>
+  <div id="game">
+    <button id="option1" class="option-btn"></button>
+    <div class="vs">VS</div>
+    <button id="option2" class="option-btn"></button>
+    <div class="info" id="roundInfo"></div>
+    <div class="info" id="lastWinner"></div>
+    <div class="controls">
+      <button id="passBtn" class="option-btn">Pass This Round</button>
+      <button id="restartBtn" class="option-btn">Restart Game</button>
+    </div>
+  </div>
+  <div id="result" class="hidden">
+    <div class="result-box">
+      <h2>Game Over!</h2>
+      <p id="winnerText"></p>
+      <button id="playAgainBtn" class="option-btn">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    const ANIME_LIST = ["Goku (Dragon Ball)", "Luffy (One Piece)", "Naruto (Naruto)", "Deku (My Hero Academia)", "Eren (Attack on Titan)", "Saitama (One Punch Man)", "Levi (Attack on Titan)", "Light Yagami (Death Note)", "Edward Elric (Fullmetal Alchemist)", "Ichigo (Bleach)"];
+    const MAX_ROUNDS = 25;
+
+    let remainingCharacters = [];
+    let currentOptions = [];
+    let winnerOfPreviousRound = null;
+    let round = 0;
+    let finalWinner = null;
+
+    const option1Btn = document.getElementById('option1');
+    const option2Btn = document.getElementById('option2');
+    const roundInfo = document.getElementById('roundInfo');
+    const lastWinner = document.getElementById('lastWinner');
+    const passBtn = document.getElementById('passBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    const gameDiv = document.getElementById('game');
+    const resultDiv = document.getElementById('result');
+    const winnerText = document.getElementById('winnerText');
+
+    function getRandomItemAndRemove(list) {
+      const copy = [...list];
+      const index = Math.floor(Math.random() * copy.length);
+      const item = copy.splice(index, 1)[0];
+      return { item, newList: copy };
+    }
+
+    function updateDisplay() {
+      if (currentOptions.length < 2) return;
+      option1Btn.textContent = currentOptions[0];
+      option2Btn.textContent = currentOptions[1];
+      roundInfo.textContent = `Round: ${round} / ${MAX_ROUNDS}`;
+      lastWinner.textContent = winnerOfPreviousRound ? `Last Round Winner: ${winnerOfPreviousRound}` : '';
+    }
+
+    function showResultScreen() {
+      gameDiv.classList.add('hidden');
+      resultDiv.classList.remove('hidden');
+      if (finalWinner) {
+        winnerText.textContent = `${finalWinner} has reigned supreme!${round >= MAX_ROUNDS ? " (Max rounds reached!)" : ''}`;
+      } else {
+        winnerText.textContent = `The battle has ended! Not enough characters for further comparisons, or no clear winner emerged.`;
+      }
+    }
+
+    function handleSelection(winner) {
+      const loser = currentOptions.find(c => c !== winner);
+      remainingCharacters = remainingCharacters.filter(c => c !== loser);
+      winnerOfPreviousRound = winner;
+      round++;
+
+      if (round > MAX_ROUNDS || remainingCharacters.length === 0) {
+        finalWinner = winner;
+        showResultScreen();
+        return;
+      }
+
+      const { item: newOpponent, newList } = getRandomItemAndRemove(remainingCharacters);
+      remainingCharacters = newList;
+      currentOptions = [winner, newOpponent];
+      updateDisplay();
+    }
+
+    function handlePass() {
+      round++;
+      remainingCharacters = remainingCharacters.filter(c => !currentOptions.includes(c));
+
+      if (round > MAX_ROUNDS || remainingCharacters.length < 2) {
+        finalWinner = winnerOfPreviousRound;
+        showResultScreen();
+        return;
+      }
+
+      const { item: one, newList: pool1 } = getRandomItemAndRemove(remainingCharacters);
+      const { item: two, newList: pool2 } = getRandomItemAndRemove(pool1);
+      currentOptions = [one, two];
+      remainingCharacters = pool2;
+      winnerOfPreviousRound = null;
+      updateDisplay();
+    }
+
+    function initializeGame() {
+      const pool = [...ANIME_LIST];
+      const { item: a, newList: pool1 } = getRandomItemAndRemove(pool);
+      const { item: b, newList: pool2 } = getRandomItemAndRemove(pool1);
+      currentOptions = [a, b];
+      remainingCharacters = pool2;
+      winnerOfPreviousRound = null;
+      finalWinner = null;
+      round = 1;
+      gameDiv.classList.remove('hidden');
+      resultDiv.classList.add('hidden');
+      updateDisplay();
+    }
+
+    option1Btn.addEventListener('click', () => handleSelection(currentOptions[0]));
+    option2Btn.addEventListener('click', () => handleSelection(currentOptions[1]));
+    passBtn.addEventListener('click', handlePass);
+    restartBtn.addEventListener('click', initializeGame);
+    playAgainBtn.addEventListener('click', initializeGame);
+
+    initializeGame();
+  </script>
+</body>
+</html>
